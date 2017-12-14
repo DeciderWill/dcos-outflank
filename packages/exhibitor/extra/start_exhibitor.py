@@ -23,7 +23,7 @@ def write_str(filename, contents):
 def invoke_detect_ip():
     try:
         ip = check_output(
-            ['/opt/mesosphere/bin/detect_ip']).strip().decode('utf-8')
+            ['/opt/mesosphere/bin/detect_ip_public']).strip().decode('utf-8')
     except CalledProcessError as e:
         print("check_output exited with {}".format(e))
         sys.exit(1)

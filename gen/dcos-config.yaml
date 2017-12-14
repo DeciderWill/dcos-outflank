@@ -441,6 +441,7 @@ package:
       MESOS_MAX_SLAVE_PING_TIMEOUTS=20
       MESOS_FAIR_SHARING_EXCLUDED_RESOURCE_NAMES={{ fair_sharing_excluded_resource_names }}
       MESOS_FILTER_GPU_RESOURCES={{ gpus_are_scarce }}
+      MESOS_ADVERTISE_IP={{ ip_public_ip_value }}
 {% switch has_mesos_max_completed_tasks_per_framework %}
 {% case "true" %}
       MESOS_MAX_COMPLETED_TASKS_PER_FRAMEWORK={{ mesos_max_completed_tasks_per_framework }}
@@ -481,6 +482,7 @@ package:
       MESOS_HOSTNAME_LOOKUP=false
       MESOS_DEFAULT_CONTAINER_DNS=file:///opt/mesosphere/etc/mesos-slave-dns.json
       MESOS_IMAGE_GC_CONFIG=file:///opt/mesosphere/etc/mesos-slave-image-gc-config.json
+      MESOS_ADVERTISE_IP={{ ip_public_ip_value }}
       GLOG_drop_log_memory=false
 {% switch use_mesos_hooks %}
 {% case "true" %}
@@ -513,6 +515,7 @@ package:
       MESOS_RESOURCES=[{"name":"ports","type":"RANGES","ranges": {"range": [{"begin": 1, "end": 21},{"begin": 23, "end": 5050},{"begin": 5052, "end": 32000}]}}]
       MESOS_DEFAULT_ROLE=slave_public
       MESOS_ATTRIBUTES=public_ip:true
+      MESOS_ADVERTISE_IP={{ ip_public_ip_value }}
   - path: /etc/mesos-executor-environment.json
     content: |
       {

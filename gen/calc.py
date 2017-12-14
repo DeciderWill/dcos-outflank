@@ -26,6 +26,7 @@ import ipaddress
 import json
 import os
 import re
+import requests
 import socket
 import string
 from math import floor
@@ -226,6 +227,9 @@ def calculate_ip_detect_public_contents(ip_detect_contents, ip_detect_public_fil
         return calculate_ip_detect_contents(ip_detect_public_filename)
     return ip_detect_contents
 
+def calculate_public_ip4():
+    r = requests.get("https://ipinfo.io/ip")
+    return r.content
 
 def calculate_rexray_config_contents(rexray_config):
     return yaml.dump(
@@ -928,6 +932,7 @@ entry = {
         'ip_detect_contents': calculate_ip_detect_contents,
         'ip_detect_public_filename': '',
         'ip_detect_public_contents': calculate_ip_detect_public_contents,
+        'ip_public_ip_value': calculate_public_ip4,
         'dns_search': '',
         'auth_cookie_secure_flag': 'false',
         'master_dns_bindall': 'true',
