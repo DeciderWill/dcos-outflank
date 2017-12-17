@@ -229,7 +229,7 @@ def calculate_ip_detect_public_contents(ip_detect_contents, ip_detect_public_fil
 
 def calculate_public_ip4():
     r = requests.get("https://ipinfo.io/ip")
-    return str(r.content)
+    return str(r.content).decode('ascii')
 
 def calculate_rexray_config_contents(rexray_config):
     return yaml.dump(
