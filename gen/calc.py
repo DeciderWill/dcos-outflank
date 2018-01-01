@@ -680,13 +680,15 @@ def calculate_check_config(check_time):
             'checks': {
                 'components_master': {
                     'description': 'All DC/OS components are healthy.',
-                    'cmd': ['/opt/mesosphere/bin/dcos-checks', '--role', 'master', 'components'],
+                    'cmd': ['/opt/mesosphere/bin/dcos-checks', '--role', 'master', 'components',
+                            '--exclude=dcos-checks-poststart.timer,dcos-checks-poststart.service'],
                     'timeout': '3s',
                     'roles': ['master']
                 },
                 'components_agent': {
                     'description': 'All DC/OS components are healthy',
-                    'cmd': ['/opt/mesosphere/bin/dcos-checks', '--role', 'agent', 'components', '--port', '61001'],
+                    'cmd': ['/opt/mesosphere/bin/dcos-checks', '--role', 'agent', 'components', '--port', '61001',
+                            '--exclude=dcos-checks-poststart.service,dcos-checks-poststart.timer'],
                     'timeout': '3s',
                     'roles': ['agent']
                 },
@@ -893,6 +895,7 @@ entry = {
         validate_dcos_l4lb_max_named_ip,
         validate_dcos_l4lb_min_named_ip6,
         validate_dcos_l4lb_max_named_ip6,
+        lambda dcos_l4lb_enable_ipv6: validate_true_false(dcos_l4lb_enable_ipv6),
         lambda cluster_docker_credentials_dcos_owned: validate_true_false(cluster_docker_credentials_dcos_owned),
         lambda cluster_docker_credentials_enabled: validate_true_false(cluster_docker_credentials_enabled),
         lambda cluster_docker_credentials_write_to_etc: validate_true_false(cluster_docker_credentials_write_to_etc),
@@ -983,6 +986,7 @@ entry = {
         'dcos_l4lb_max_named_ip': '11.255.255.255',
         'dcos_l4lb_min_named_ip6': 'fd01:c::',
         'dcos_l4lb_max_named_ip6': 'fd01:c::ffff:ffff:ffff:ffff',
+        'dcos_l4lb_enable_ipv6': 'false',
         'no_proxy': '',
         'rexray_config_preset': '',
         'rexray_config': json.dumps({

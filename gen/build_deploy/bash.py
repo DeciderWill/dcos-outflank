@@ -288,11 +288,27 @@ function check_service() {
   (( OVERALL_RC += $RC ))
 }
 
+function empty_dir() {
+    # Return 0 if $1 is a directory containing no files.
+    DIRNAME=$1
+
+    RC=0
+    if [[ ( ! -d "$DIRNAME" ) || $(ls -A "$DIRNAME") ]]; then
+        RC=1
+    fi
+    return $RC
+}
+
 function check_preexisting_dcos() {
     echo -e -n 'Checking if DC/OS is already installed: '
-    if [[ ( -d /etc/systemd/system/dcos.target ) || \
-       ( -d /etc/systemd/system/dcos.target.wants ) || \
-       ( -d /opt/mesosphere ) ]]; then
+    if (
+        # dcos.target exists and is a directory, OR
+        [[ -d /etc/systemd/system/dcos.target ]] ||
+        # dcos.target.wants exists and is a directory, OR
+        [[ -d /etc/systemd/system/dcos.target.wants ]] ||
+        # /opt/mesosphere exists and is not an empty directory
+        ( [[ -a /opt/mesosphere ]] && ( ! empty_dir /opt/mesosphere ) )
+    ); then
         # this will print: Checking if DC/OS is already installed: FAIL (Currently installed)
         print_status 1 "${NORMAL}(Currently installed)"
         echo
@@ -452,11 +468,9 @@ function check_all() {
             "41281 zookeeper" \
             "46839 metronome" \
             "61053 mesos-dns" \
-            "61420 epmd" \
-            "62053 dcos-net" \
+            "61420 dcos-net" \
             "62080 dcos-net" \
-            "62501 dcos-net" \
-            "63053 dcos-net"
+            "62501 dcos-net"
         do
             check_service $service
         done
@@ -466,11 +480,9 @@ function check_all() {
             "53 dcos-net" \
             "5051 mesos-agent" \
             "61001 agent-adminrouter" \
-            "61420 epmd" \
-            "62053 dcos-net" \
+            "61420 dcos-net" \
             "62080 dcos-net" \
-            "62501 dcos-net" \
-            "63053 dcos-net"
+            "62501 dcos-net"
         do
             check_service $service
         done
